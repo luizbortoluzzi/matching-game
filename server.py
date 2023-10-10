@@ -70,14 +70,14 @@ class MemoryGameServer:
                 else:
                     hide_cards = True  # Definindo a flag como True se as cartas não formarem um par
 
+                    # Alternando o jogador (só alternar se as cartas não formarem um par)
+                    current_index = self.player_list.index(self.current_player)
+                    next_index = (current_index + 1) % len(self.player_list)
+                    self.current_player = self.player_list[next_index]
+
                 # Limpando a lista das duas últimas cartas reveladas após um intervalo, permitindo que os jogadores as vejam
                 timer = threading.Timer(1.0, self.clear_last_two_cards)  # Cria um timer de 1 segundo
                 timer.start()  # Inicia o timer
-
-                # Alternando o jogador
-                current_index = self.player_list.index(self.current_player)
-                next_index = (current_index + 1) % len(self.player_list)
-                self.current_player = self.player_list[next_index]
 
             return card_value, self.last_two_cards, hide_cards  # Retornando a flag junto com os outros valores
         return None, None, None
