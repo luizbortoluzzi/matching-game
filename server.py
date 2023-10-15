@@ -28,31 +28,6 @@ class MemoryGameServer:
     def get_current_player(self):
         return self.current_player
 
-    # def play_card(self, player_name, card_index):
-    #     if player_name == self.current_player and card_index not in [index for index, _ in self.last_two_cards]:
-    #         card_value = self.cards[card_index]
-
-    #         self.last_two_cards.append((card_index, card_value))
-
-    #         if len(self.last_two_cards) == 2:
-    #             index1, value1 = self.last_two_cards[0]
-    #             index2, value2 = self.last_two_cards[1]
-
-    #             if value1 == value2:
-    #                 self.players[player_name] += 1
-    #                 self.matched_pairs.extend([value1, value2])
-
-    #             # Limpando a lista das duas últimas cartas reveladas
-    #             self.last_two_cards.clear()
-
-    #             # Alternando o jogador
-    #             current_index = self.player_list.index(self.current_player)
-    #             next_index = (current_index + 1) % len(self.player_list)
-    #             self.current_player = self.player_list[next_index]
-
-    #         return card_value
-    #     return None
-
     def play_card(self, player_name, card_index):
         if player_name == self.current_player and card_index not in [index for index, _ in self.last_two_cards]:
             card_value = self.cards[card_index]
@@ -90,7 +65,8 @@ class MemoryGameServer:
             'cards': self.cards,
             'players': self.players,
             'matched_pairs': self.matched_pairs,
-            'current_player': self.current_player
+            'current_player': self.current_player,
+            'last_two_cards': self.last_two_cards
         }
 
 def main():
