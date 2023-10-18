@@ -19,6 +19,24 @@ def check_game_state():
         print(f"Jogo terminado! O vencedor é {winner} com {game_state['players'][winner]} pares encontrados.")
         root.quit()
 
+def update_ui():
+    game_state = server.get_state()  # Obtém as cartas que foram recentemente reveladas
+    last_two_cards = game_state['last_two_cards']
+
+    for card_index, card_value in last_two_cards:
+        cards[card_index].config(text=str(card_value))
+    
+    if last_two_cards and len(last_two_cards) == 2:
+        (index1, value1), (index2, value2) = last_two_cards
+        cards[index1].config(text=str(value1))
+        cards[index2].config(text=str(value2))
+
+        # Se os valores das duas últimas cartas não são iguais, esconde-as após um pequeno intervalo
+        if value1 != value2:
+            root.after(1000, hide_last_two_cards, last_two_cards)
+
+    root.after(100, update_ui)
+
 def reveal_card(card_index, card_value):
     card_states[card_index] = True
     cards[card_index].config(text=str(card_value))
@@ -37,29 +55,11 @@ def hide_last_two_cards(last_two_cards):
         cards[card_index].config(text=" ")  # Escondendo a carta
         card_states[card_index] = False  # Verificar o estado do jogo após um intervalo
 
-# def update_game_state():
-#     game_state = server.get_state()
-#     matched_pairs = game_state['matched_pairs']
-
-#     for card_index, card_value in enumerate(game_state['cards']):
-#         if card_index not in matched_pairs and not card_states[card_index]:
-#             cards[card_index].config(text=" ")  # Assegura que as cartas não pareadas sejam escondidas
-#         elif card_index in matched_pairs and not card_states[card_index]:
-#             cards[card_index].config(text=str(card_value))  # Revela as cartas pareadas
-
-#     root.after(1000, update_game_state)  # Atualiza o estado do jogo a cada 1 segundo
-
 def update_game_state():
     game_state = server.get_state()
 
     # Verifica se o jogo já começou
     if game_state['current_player']:
-        # Atualiza o estado das cartas com base no estado do jogo no servidor
-        for card_index, card_value in enumerate(game_state['cards']):
-            if not card_states[card_index]:
-                # cards[card_index].config(text=str(card_value))
-                # root.after(1000, hide_card, card_index)  # Esconde a carta após 1 segundo se não for um par
-                pass
         # Mantém os pares revelados e desabilita os botões
         for pair_index in game_state['matched_pairs']:
             cards[pair_index].config(text=str(game_state['cards'][pair_index]), state=tk.DISABLED)
@@ -90,6 +90,7 @@ def create_gui():
     register_button = tk.Button(root, text="Registrar", command=register_player)
     register_button.grid(row=6, columnspan=4)
     update_game_state()
+    update_ui()
 
 root = tk.Tk()
 root.title("Jogo da Memória")
