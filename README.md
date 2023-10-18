@@ -10,7 +10,7 @@ sudo apt-get install python3-tk
 For Fedora
 ```sh
 sudo dnf install python3-tkinter
-```a
+```
 
 First run the server
 
