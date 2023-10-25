@@ -9,8 +9,8 @@ class MemoryGameServer:
         self.players = {}
         self.matched_pairs = []
         self.current_player = None
-        self.player_list = []  # Lista de jogadores registrados
-        self.last_two_cards = []  # Armazena os índices das duas últimas cartas selecionadas
+        self.player_list = []
+        self.last_two_cards = []
 
     def register_player(self, player_name):
         if len(self.players) < 2:
@@ -18,7 +18,6 @@ class MemoryGameServer:
             self.player_list.append(player_name)
 
             if len(self.player_list) == 2:
-                # Inicialize as cartas e defina o primeiro jogador quando ambos os jogadores estiverem registrados
                 self.cards = list(range(1, 9)) * 2
                 random.shuffle(self.cards)
                 self.current_player = self.player_list[0]
@@ -43,18 +42,16 @@ class MemoryGameServer:
                     self.players[player_name] += 1
                     self.matched_pairs.extend([index1, index2])
                 else:
-                    hide_cards = True  # Definindo a flag como True se as cartas não formarem um par
-
-                    # Alternando o jogador (só alternar se as cartas não formarem um par)
+                    hide_cards = True
                     current_index = self.player_list.index(self.current_player)
                     next_index = (current_index + 1) % len(self.player_list)
                     self.current_player = self.player_list[next_index]
 
-                # Limpando a lista das duas últimas cartas reveladas após um intervalo, permitindo que os jogadores as vejam
-                timer = threading.Timer(1.0, self.clear_last_two_cards)  # Cria um timer de 1 segundo
-                timer.start()  # Inicia o timer
+                
+                timer = threading.Timer(1.0, self.clear_last_two_cards)
+                timer.start()
 
-            return card_value, self.last_two_cards, hide_cards  # Retornando a flag junto com os outros valores
+            return card_value, self.last_two_cards, hide_cards
         return None, None, None
 
     def clear_last_two_cards(self):
