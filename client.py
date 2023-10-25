@@ -58,9 +58,9 @@ def hide_last_two_cards(last_two_cards):
 def update_game_state():
     game_state = server.get_state()
 
-    # Verifica se o jogo já começou
+   
     if game_state['current_player']:
-        # Mantém os pares revelados e desabilita os botões
+    
         for pair_index in game_state['matched_pairs']:
             cards[pair_index].config(text=str(game_state['cards'][pair_index]), state=tk.DISABLED)
             card_states[pair_index] = True
